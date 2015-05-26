@@ -13,8 +13,8 @@
         document.addEventListener("deviceready", onDeviceReady, false);
         
         function onDeviceReady() {
-            var btnSubirArchivo=$("#btnSubirArchivo");
-            btnSubirArchivo.tap(function (){
+            var btnTomarFoto=$("#btnTomarFoto");
+            btnTomarFoto.tap(function (){
             /*navigator.camera.getPicture(
                 uploadPhoto,
                 function(message) { alert('get picture failed'); },
@@ -26,13 +26,17 @@
             );*/
             navigator.device.capture.captureImage(function(mediaFiles){
 		path = mediaFiles[0].fullPath;
-		$('#regFoto').append('<br><img src="'+path+'" width="100%" />').attr('rel',path);
+		$('#regFoto').append('<br><img id="imagen" src="'+path+'" width="100%" />').attr('rel',path);
 	    },function(error){
 		navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
-	    },{limit:1});
+	    },{limit:1});            
+            });          
             
-            });
-            uploadPhoto(path);
+            var btnSubirArchivo=$("#btnSubirArchivo");
+            btnSubirArchivo.tap(function (){
+	      var rutaIMG=$("#imagen").attr("src");
+	      uploadPhoto(rutaIMG);
+	      });
         }
 
         function uploadPhoto(foto) {
@@ -50,9 +54,9 @@
 	var ft = new FileTransfer();
 	ft.upload(foto,"http://itslmoviles.260mb.net/subirArchivo/pgtest.php",function(r){
 		//saveLogin(nom,disp()['id']);
-		navigator.notification.confirm("Datos Guardos Satisfactoriamente ", null, "Notificacion");
+		navigator.notification.confirm("Datos Guardos Satisfactoriamente ",null, "Notificacion");
 	}, function(err){
-		navigator.notification.alert("Error: "+err.code, null, "Error de Envío");
+		navigator.notification.alert("Error: "+err.code,null, "Error de Envío");
 	}, options);
 }
         /*function uploadPhoto(imageURI) {
@@ -93,8 +97,9 @@
 	<h1>Subir archivo a servidior</h1>
     </div>
     <div data-role="content">
-	<input type="button" id="btnSubirArchivo" value="Subir Arcchivo" >
+	<input type="button" id="btnTomarFoto" value="Tomar Foto" >	
 	<div id="regFoto"></div>
+	<input type="button" id="btnSubirArchivo" value="Subir Arcchivo" >
     </div>
     <div data-role="footer">
 	<p>Derechos reservados</p>
