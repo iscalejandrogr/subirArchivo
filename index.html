@@ -11,13 +11,11 @@
 <script src="js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
         document.addEventListener("deviceready", onDeviceReady, false);
-
-        // device APIs are available
-        //
+        
         function onDeviceReady() {
             var btnSubirArchivo=$("#btnSubirArchivo");
             btnSubirArchivo.tap(function (){
-            navigator.camera.getPicture(
+            /*navigator.camera.getPicture(
                 uploadPhoto,
                 function(message) { alert('get picture failed'); },
                 {
@@ -25,13 +23,39 @@
                     destinationType : navigator.camera.DestinationType.FILE_URI,
                     sourceType      : navigator.camera.PictureSourceType.PHOTOLIBRARY
                 }
-            );
+            );*/
+            navigator.device.capture.captureImage(function(mediaFiles){
+		path = mediaFiles[0].fullPath;
+		$('#regFoto').append('<br><img src="'+path+'" width="100%" />').attr('rel',path);
+	    },function(error){
+		navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+	    },{limit:1});
             
             });
-            
+            uploadPhoto(path);
         }
 
-        function uploadPhoto(imageURI) {
+        function uploadPhoto(foto) {
+	var options = new FileUploadOptions();
+	options.fileKey="archivo";
+	options.fileName="Carlos";
+	options.mimeType="image/jpeg";
+
+	var params = {};
+	params.value1 = "test";
+	params.value2 = "param";
+
+	options.params = params;
+
+	var ft = new FileTransfer();
+	ft.upload(foto,"http://itslmoviles.260mb.net/subirArchivo/pgtest.php",function(r){
+		//saveLogin(nom,disp()['id']);
+		navigator.notification.confirm("Datos Guardos Satisfactoriamente ", null, "Notificacion");
+	}, function(err){
+		navigator.notification.alert("Error: "+err.code, null, "Error de Envío");
+	}, options);
+}
+        /*function uploadPhoto(imageURI) {
             var options = new FileUploadOptions();
             options.fileKey="file";
             options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
@@ -59,7 +83,7 @@
             alert("Ha ocurrido un error al subir el archivo: Code = " + error.code);
             console.log("upload error source " + error.source);
             console.log("upload error target " + error.target);
-        }
+        }*/
 
         </script>
 </head>
@@ -69,7 +93,8 @@
 	<h1>Subir archivo a servidior</h1>
     </div>
     <div data-role="content">
-	<input type="button" id="btnSubirArchivo" value="Subir Arcchivo" >	
+	<input type="button" id="btnSubirArchivo" value="Subir Arcchivo" >
+	<div id="regFoto"></div>
     </div>
     <div data-role="footer">
 	<p>Derechos reservados</p>
