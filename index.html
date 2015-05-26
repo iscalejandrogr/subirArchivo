@@ -35,11 +35,13 @@
             var btnSubirArchivo=$("#btnSubirArchivo");
             btnSubirArchivo.tap(function (){
 	      var rutaIMG=$("#imagen").attr("src");
+	      alert("Ruta: "+rutaIMG);
 	      uploadPhoto(rutaIMG);
 	      });
         }
 
         function uploadPhoto(foto) {
+        alert("Recepción ruta: "+foto);
 	var options = new FileUploadOptions();
 	options.fileKey="archivo";
 	options.fileName="Carlos";
