@@ -26,13 +26,11 @@
             var btnSubirArchivo=$("#btnSubirArchivo");
             btnSubirArchivo.tap(function (){
 	      var rutaIMG=$("#imagen").attr("src");
-	      //alert("Ruta: "+rutaIMG);
 	      uploadPhoto(rutaIMG);
 	      });
         }
 
-        function uploadPhoto(foto) {
-        alert("Recepción ruta: "+foto);        
+        function uploadPhoto(foto) {       
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=$("#nomImagen").val();
@@ -41,13 +39,11 @@
 	var params = {};
 	params.value1 = "test";
 	params.value2 = "param";
-
 	options.params = params;
 
 	var ft = new FileTransfer();
-	ft.upload(foto,"http://itslmoviles.260mb.net/subirArchivo/upload.php",function(r){
-		//saveLogin(nom,disp()['id']);
-		navigator.notification.confirm("Datos Guardos Satisfactoriamente: "+r.response,null, "Notificacion");
+	ft.upload(foto,"http://itslmoviles.260mb.net/subirArchivo/upload.php",function(r){		
+		navigator.notification.confirm("El archivo: "+r.response,null, "Notificacion");
 	}, function(err){
 		navigator.notification.alert("Error: "+err.code,null, "Error de Envío");
 	}, options);
