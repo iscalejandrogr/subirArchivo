@@ -15,15 +15,6 @@
         function onDeviceReady() {
             var btnTomarFoto=$("#btnTomarFoto");
             btnTomarFoto.tap(function (){
-            /*navigator.camera.getPicture(
-                uploadPhoto,
-                function(message) { alert('get picture failed'); },
-                {
-                    quality         : 50,
-                    destinationType : navigator.camera.DestinationType.FILE_URI,
-                    sourceType      : navigator.camera.PictureSourceType.PHOTOLIBRARY
-                }
-            );*/
             navigator.device.capture.captureImage(function(mediaFiles){
 		path = mediaFiles[0].fullPath;
 		$('#regFoto').append('<br><img id="imagen" src="'+path+'" width="100%" />').attr('rel',path);
@@ -41,10 +32,10 @@
         }
 
         function uploadPhoto(foto) {
-        alert("Recepción ruta: "+foto);
+        alert("Recepción ruta: "+foto);        
 	var options = new FileUploadOptions();
 	options.fileKey="file";
-	options.fileName="imagen";
+	options.fileName=$("#nomImagen").val();
 	options.mimeType="image/jpeg";
 
 	var params = {};
@@ -61,36 +52,6 @@
 		navigator.notification.alert("Error: "+err.code,null, "Error de Envío");
 	}, options);
 }
-        /*function uploadPhoto(imageURI) {
-            var options = new FileUploadOptions();
-            options.fileKey="file";
-            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
-            options.mimeType="image/jpeg";
-
-            var params = {};
-            params.value1 = "test";
-            params.value2 = "param";
-
-            options.params = params;
-
-            var ft = new FileTransfer();
-            alert("que paso?");
-            ft.upload(imageURI, encodeURI("http://itslmoviles.260mb.net/subirArchivo/pgtest.php"), win, fail, options);
-        }
-
-        function win(r) {
-	    alert("Archivo subido correctamente");
-            console.log("Code = " + r.responseCode);
-            console.log("Response = " + r.response);
-            console.log("Sent = " + r.bytesSent);
-        }
-
-        function fail(error) {
-            alert("Ha ocurrido un error al subir el archivo: Code = " + error.code);
-            console.log("upload error source " + error.source);
-            console.log("upload error target " + error.target);
-        }*/
-
         </script>
 </head>
 <body>
@@ -101,6 +62,7 @@
     <div data-role="content">
 	<input type="button" id="btnTomarFoto" value="Tomar Foto" >	
 	<div id="regFoto"></div>
+	<input type="text" id="nomImagen" placeholder="Nombre del servicio">
 	<input type="button" id="btnSubirArchivo" value="Subir Arcchivo" >
     </div>
     <div data-role="footer">
